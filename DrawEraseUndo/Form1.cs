@@ -26,7 +26,7 @@ namespace DrawEraseUndo
             InitializeComponent();
 
             SetupDoubleBuffering();
-        
+            this.Cursor = Cursors.Cross;
         }
 
         private void SetupDoubleBuffering()
@@ -81,11 +81,13 @@ namespace DrawEraseUndo
         private void eraseButton_Click(object sender, EventArgs e)
         {
             _currentOp = Operation.Erase;
+            this.Cursor = Cursors.Hand;
         }
 
         private void drawButton_Click(object sender, EventArgs e)
         {
             _currentOp = Operation.Draw;
+            this.Cursor = Cursors.Cross;
         }
         private Drawable GetDrawableForCurrentOp()
         {
