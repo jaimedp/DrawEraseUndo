@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace DrawEraseUndo
 {
-    public class Eraser : Drawable
+    public class Eraser : PolylineDrawable
     {
         protected override Pen CreatePen()
         {

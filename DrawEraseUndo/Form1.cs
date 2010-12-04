@@ -18,8 +18,8 @@ namespace DrawEraseUndo
     public partial class Form1 : Form
     {
         Operation _currentOp = Operation.Draw;
-        Drawable _curDrawable = null;
-        IList<Drawable> _drawables = new List<Drawable>();
+        IDrawable _curDrawable = null;
+        IList<IDrawable> _drawables = new List<IDrawable>();
 
         public Form1()
         {
@@ -39,7 +39,7 @@ namespace DrawEraseUndo
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            foreach (Drawable d in _drawables)
+            foreach (PolylineDrawable d in _drawables)
             {
                 d.Draw(e.Graphics);
             }
@@ -49,14 +49,14 @@ namespace DrawEraseUndo
         {
             _curDrawable = GetDrawableForCurrentOp();
             _drawables.Add(_curDrawable);
-            _curDrawable.Points.Add(e.Location);
+            _curDrawable.AddPoint(e.Location);
         }
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
             if (_curDrawable != null)
             {
-                _curDrawable.Points.Add(e.Location);
+                _curDrawable.AddPoint(e.Location);
                 this.Invalidate();
             }
 
@@ -64,7 +64,7 @@ namespace DrawEraseUndo
 
         private void Form1_MouseUp(object sender, MouseEventArgs e)
         {
-            _curDrawable.Points.Add(e.Location);
+            _curDrawable.AddPoint(e.Location);
             _curDrawable = null;
             this.Invalidate();
         }
@@ -89,10 +89,15 @@ namespace DrawEraseUndo
             _currentOp = Operation.Draw;
             this.Cursor = Cursors.Cross;
         }
-        private Drawable GetDrawableForCurrentOp()
+
+        private IDrawable GetDrawableForCurrentOp()
         {
+            /// TODO: change the creation of the drawable to be 
+            /// polimorfic... if we start adding more types of drawables, we don't want
+            /// to need to keep adding options here!!!
             if (_currentOp == Operation.Draw)
-                return new Drawable();
+                return new PolylineDrawable();
+
             if (_currentOp == Operation.Erase)
                 return new Eraser();
 

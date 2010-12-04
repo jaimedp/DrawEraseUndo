@@ -1,30 +1,30 @@
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 
 namespace DrawEraseUndo
 {
-    public class Drawable
+    public class PolylineDrawable : IDrawable
     {
-        public IList<Point> Points { get; private set; }
+        private readonly IList<Point> _points;
         private Pen _pen;
 
-        public Drawable()
+        public PolylineDrawable()
         {
-            Points = new List<Point>();
+            _points = new List<Point>();
+        }
+
+        public void AddPoint(Point p)
+        {
+            _points.Add(p);
         }
 
         public void Draw(Graphics gr)
         {
             if (_pen == null)
                 _pen = CreatePen();
-            
-            gr.DrawLines(_pen, Points.ToArray());
+
+            gr.DrawLines(_pen, _points.ToArray());
         }
 
         protected virtual Pen CreatePen()
